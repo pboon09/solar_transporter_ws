@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "arm_math.h"
 #include "transporter_config.h"
+#include "signal_generator.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,11 +48,23 @@
 /* USER CODE BEGIN PV */
 int range3 = 0, range4 = 0;
 uint32_t msCounter = 0;
-const uint32_t DIRECTION_CHANGE_INTERVAL = 10000; // 3 seconds in milliseconds
+const uint32_t DIRECTION_CHANGE_INTERVAL = 200; // 3 seconds in milliseconds
 uint8_t motorDirection = 0; // 0 for positive, 1 for negative
 float setpoint = 0;
 float filteredValue = 0;
-/* USER CODE END PV */
+float cmd_vel = 0;
+
+SignalGenerator sine_sg;
+SignalGenerator chirp_linear_sg;
+SignalGenerator chirp_log_sg;
+SignalGenerator square_sg;
+SignalGenerator ramp_sg;
+
+float sine_sample = 0.0f;
+float chirp_Linear_sample = 0.0f;
+float chirp_log_sample = 0.0f;
+float square_sample = 0.0f;
+float ramp_sample = 0.0f;/* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -101,6 +114,66 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 	transporter_begin();
+
+	  // 1. Sine Wave Example
+	  SIGNAL_init(&sine_sg, SIGNAL_SINE);
+	  SIGNAL_config_sine(&sine_sg,
+	      0.7f/3.0f,    // Amplitude
+	      1.0f,         // Frequency
+	      0.0f,         // Phase
+	      0.0f,         // Offset
+	      -0.7f/3.0f,   // Min Setpoint
+	      0.7f/3.0f     // Max Setpoint
+	  );
+
+	  // 2. Chirp Wave Example (Linear)
+	  SIGNAL_init(&chirp_linear_sg, SIGNAL_CHIRP);
+	  SIGNAL_config_chirp(&chirp_linear_sg,
+	      0.7f/3.0f,        // Amplitude
+	      1.0f,             // Start Frequency
+	      10.0f,            // End Frequency
+	      5.0f,             // Duration (seconds)
+	      CHIRP_LINEAR,     // Chirp Type
+	      -0.7f/3.0f,       // Min Setpoint
+	      0.7f/3.0f         // Max Setpoint
+	  );
+
+	  // 3. Chirp Wave Example (Logarithmic)
+	  SIGNAL_init(&chirp_log_sg, SIGNAL_CHIRP);
+	  SIGNAL_config_chirp(&chirp_log_sg,
+	      0.7f/3.0f,            // Amplitude
+	      1.0f,                 // Start Frequency
+	      10.0f,                // End Frequency
+	      5.0f,                 // Duration (seconds)
+	      CHIRP_LOGARITHMIC,    // Chirp Type
+	      -0.7f/3.0f,           // Min Setpoint
+	      0.7f/3.0f             // Max Setpoint
+	  );
+
+	  // 4. Square Wave Example
+	  SIGNAL_init(&square_sg, SIGNAL_SQUARE);
+	  SIGNAL_config_square(&square_sg,
+	      0.7f/3.0f,    // Amplitude
+	      2.0f,         // Frequency
+	      0.3f,         // Duty Cycle (30%)
+	      0.0f,         // Phase
+	      0.0f,         // Offset
+	      -0.7f/3.0f,   // Min Setpoint
+	      0.7f/3.0f     // Max Setpoint
+	  );
+
+	  // 5. Ramp Wave Example
+	  SIGNAL_init(&ramp_sg, SIGNAL_RAMP);
+	  SIGNAL_config_ramp(&ramp_sg,
+	      0.7f/3.0f,    // Amplitude
+	      1.0f,         // Frequency
+	      -0.7f/3.0f,   // Ramp Start
+	      0.7f/3.0f,    // Ramp End
+	      0.0f,         // Phase
+	      0.0f,         // Offset
+	      -0.7f/3.0f,   // Min Setpoint
+	      0.7f/3.0f     // Max Setpoint
+	  );
 
   /* USER CODE END 2 */
 
@@ -161,48 +234,25 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-//	if (htim == &htim2) {
-//		QEI_get_diff_count(&encoder3);
-//		QEI_compute_data(&encoder3);
-//
-//		QEI_get_diff_count(&encoder4);
-//		QEI_compute_data(&encoder4);
-//
-//		MDXX_set_range(&motor3, 2000, 65535);
-//		MDXX_set_range(&motor4, 2000, 65535);
-//	}
-//}
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (htim == &htim2) {
-        // Process encoders
         QEI_get_diff_count(&encoder3);
         QEI_compute_data(&encoder3);
 
         QEI_get_diff_count(&encoder4);
         QEI_compute_data(&encoder4);
 
-        // Increment counter (1ms per call)
-        msCounter++;
+        sine_sample = SIGNAL_generate(&sine_sg, 0.001f);
+        chirp_Linear_sample = SIGNAL_generate(&chirp_linear_sg, 0.001f);
+        chirp_log_sample = SIGNAL_generate(&chirp_log_sg, 0.001f);
+		square_sample = SIGNAL_generate(&square_sg, 0.001f);
+		ramp_sample = SIGNAL_generate(&ramp_sg, 0.001f);
 
-        // Check if 3 seconds have passed
-        if (msCounter >= DIRECTION_CHANGE_INTERVAL) {
-            msCounter = 0; // Reset counter
-            motorDirection = !motorDirection; // Toggle direction
-        }
+		setpoint = sine_sample;
 
-        // Set motor range based on direction
-        if (motorDirection == 0) {
-            // Positive direction
-        	setpoint = 0.7/3;
-            MDXX_set_range(&motor4, 2000, 65535);
-            filteredValue = FIR_process(&lowPassFilter, encoder4.radps);
-        } else {
-            // Negative direction
-        	setpoint = -0.7/3;
-            MDXX_set_range(&motor4, 2000, -65535);
-            filteredValue = FIR_process(&lowPassFilter, encoder4.radps);
-        }
+        filteredValue = FIR_process(&lowPassFilter, encoder4.radps);
+        cmd_vel = PWM_Satuation(PID_CONTROLLER_Compute(&pid4, setpoint - filteredValue), 65535, -65535);
+        MDXX_set_range(&motor4, 2000, cmd_vel);
     }
 }
 /* USER CODE END 4 */

@@ -41,7 +41,7 @@ void transporter_begin() {
 //	PID_CONTROLLER_Init(&pid1, 1000, 100, 0, 65535);
 //	PID_CONTROLLER_Init(&pid2, 1000, 100, 0, 65535);
 	PID_CONTROLLER_Init(&pid3, 1000, 100, 0, 65535);
-	PID_CONTROLLER_Init(&pid4, 1000, 100, 0, 65535);
+	PID_CONTROLLER_Init(&pid4, 500000, 7500, 0, 65535);
 
 	FIR_init(&lowPassFilter, NUM_TAPS, CUTOFF_FREQ, SAMPLE_RATE);
 
