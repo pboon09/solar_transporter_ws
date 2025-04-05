@@ -24,7 +24,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h \
- ../Core/Inc/gpio.h ../Core/Inc/main.h \
+ ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h \
+ ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h \
+ ../Core/Inc/tim.h ../Core/Inc/main.h ../Core/Inc/gpio.h \
  ../Middlewares/Third_Party/ARM_CMSIS/Include/arm_math.h \
  ../Middlewares/Third_Party/ARM_CMSIS/Include/arm_math_types.h \
  ../Drivers/CMSIS/Include/cmsis_compiler.h \
@@ -56,7 +58,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/ARM_CMSIS/Include/dsp/filtering_functions.h \
  ../Middlewares/Third_Party/ARM_CMSIS/Include/dsp/support_functions.h \
  ../Middlewares/Third_Party/ARM_CMSIS/Include/dsp/quaternion_math_functions.h \
- ../Middlewares/Third_Party/ARM_CMSIS/Include/dsp/window_functions.h
+ ../Middlewares/Third_Party/ARM_CMSIS/Include/dsp/window_functions.h \
+ ../Core/Inc/transporter_config.h ../Core/Inc/tim.h ../Core/Inc/gpio.h \
+ ../Core/Inc/QEI.h ../Core/Inc/PWM.h ../Core/Inc/Cytron_MDXX.h \
+ ../Core/Inc/Controller.h ../Core/Inc/FIR.h
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -83,8 +88,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h:
-../Core/Inc/gpio.h:
+../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h:
+../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h:
+../Core/Inc/tim.h:
 ../Core/Inc/main.h:
+../Core/Inc/gpio.h:
 ../Middlewares/Third_Party/ARM_CMSIS/Include/arm_math.h:
 ../Middlewares/Third_Party/ARM_CMSIS/Include/arm_math_types.h:
 ../Drivers/CMSIS/Include/cmsis_compiler.h:
@@ -117,3 +125,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/Third_Party/ARM_CMSIS/Include/dsp/support_functions.h:
 ../Middlewares/Third_Party/ARM_CMSIS/Include/dsp/quaternion_math_functions.h:
 ../Middlewares/Third_Party/ARM_CMSIS/Include/dsp/window_functions.h:
+../Core/Inc/transporter_config.h:
+../Core/Inc/tim.h:
+../Core/Inc/gpio.h:
+../Core/Inc/QEI.h:
+../Core/Inc/PWM.h:
+../Core/Inc/Cytron_MDXX.h:
+../Core/Inc/Controller.h:
+../Core/Inc/FIR.h:
