@@ -9,6 +9,10 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
 -include Middlewares/Third_Party/ARM_CMSIS/Source/TransformFunctions/subdir.mk
 -include Middlewares/Third_Party/ARM_CMSIS/Source/SupportFunctions/subdir.mk
 -include Middlewares/Third_Party/ARM_CMSIS/Source/StatisticsFunctions/subdir.mk
@@ -26,6 +30,7 @@ RM := rm -rf
 -include Middlewares/Third_Party/ARM_CMSIS/Source/BasicMathFunctions/subdir.mk
 -include Drivers/STM32G4xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
+-include Core/Src/microros_transports/subdir.mk
 -include Core/Src/subdir.mk
 -include objects.mk
 
@@ -69,14 +74,15 @@ transporter_controller.list \
 
 
 # All Target
-all: main-build
+all:
+	+@$(MAKE) --no-print-directory pre-build && $(MAKE) --no-print-directory main-build
 
 # Main-build Target
 main-build: transporter_controller.elf secondary-outputs
 
 # Tool invocations
 transporter_controller.elf transporter_controller.map: $(OBJS) $(USER_OBJS) /home/transporter/solar_transporter_ws/firmware/transporter_controller/STM32G474RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "transporter_controller.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/transporter/solar_transporter_ws/firmware/transporter_controller/STM32G474RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="transporter_controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "transporter_controller.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/transporter/solar_transporter_ws/firmware/transporter_controller/STM32G474RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="transporter_controller.map" -Wl,--gc-sections -static -L../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -95,6 +101,10 @@ clean:
 	-$(RM) default.size.stdout transporter_controller.elf transporter_controller.list transporter_controller.map
 	-@echo ' '
 
+pre-build:
+	docker pull microros/micro_ros_static_library_builder:humble && docker run --rm -v /home/transporter/solar_transporter_ws/firmware/transporter_controller:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_stm32cubemx_utils/microros_static_library_ide microros/micro_ros_static_library_builder:humble
+	-@echo ' '
+
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
 
 fail-specified-linker-script-missing:
@@ -104,6 +114,6 @@ fail-specified-linker-script-missing:
 warn-no-linker-script-specified:
 	@echo 'Warning: No linker script specified. Check the linker settings in the build configuration.'
 
-.PHONY: all clean dependents main-build fail-specified-linker-script-missing warn-no-linker-script-specified
+.PHONY: all clean dependents main-build fail-specified-linker-script-missing warn-no-linker-script-specified pre-build
 
 -include ../makefile.targets

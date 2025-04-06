@@ -23,6 +23,7 @@ C_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 Core/Src \
+Core/Src/microros_transports \
 Core/Startup \
 Drivers/STM32G4xx_HAL_Driver/Src \
 Middlewares/Third_Party/ARM_CMSIS/Source/BasicMathFunctions \
@@ -40,4 +41,8 @@ Middlewares/Third_Party/ARM_CMSIS/Source/SVMFunctions \
 Middlewares/Third_Party/ARM_CMSIS/Source/StatisticsFunctions \
 Middlewares/Third_Party/ARM_CMSIS/Source/SupportFunctions \
 Middlewares/Third_Party/ARM_CMSIS/Source/TransformFunctions \
+Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
+Middlewares/Third_Party/FreeRTOS/Source \
+Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F \
+Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang \
 
