@@ -212,7 +212,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/geometry_msgs/msg/detail/twist__type_support.h \
  ../Core/Inc/transporter_config.h ../Core/Inc/tim.h ../Core/Inc/gpio.h \
  ../Core/Inc/QEI.h ../Core/Inc/PWM.h ../Core/Inc/Cytron_MDXX.h \
- ../Core/Inc/Controller.h ../Core/Inc/FIR.h \
+ ../Core/Inc/Controller.h ../Core/Inc/FIR.h ../Core/Inc/skid_kinematic.h \
  ../Core/Inc/signal_generator.h \
  ../Middlewares/Third_Party/ARM_CMSIS/Include/arm_math.h \
  ../Middlewares/Third_Party/ARM_CMSIS/Include/arm_math_types.h \
@@ -470,6 +470,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/Cytron_MDXX.h:
 ../Core/Inc/Controller.h:
 ../Core/Inc/FIR.h:
+../Core/Inc/skid_kinematic.h:
 ../Core/Inc/signal_generator.h:
 ../Middlewares/Third_Party/ARM_CMSIS/Include/arm_math.h:
 ../Middlewares/Third_Party/ARM_CMSIS/Include/arm_math_types.h:

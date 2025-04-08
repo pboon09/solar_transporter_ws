@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "FIR.h"
+#include  "skid_kinematic.h"
 
 /*-------Configure RMX_Motor Start------*/
 extern TIM_HandleTypeDef htim2; //For Control Loop
@@ -32,21 +33,21 @@ extern PID_CONTROLLER pid4;
 /*-------Configure RMX_Motor Stop------*/
 
 ///*-----Configure Motor 1 Start-----*/
-//extern TIM_HandleTypeDef htim8; //For Motor 1
-//extern MDXX motor1;
-//#define MOTOR1_TIM &htim8
-//#define MOTOR1_TIM_CH TIM_CHANNEL_1
-//#define MOTOR1_GPIOx
-//#define MOTOR1_GPIO_Pin
+extern TIM_HandleTypeDef htim8; //For Motor 1
+extern MDXX motor1;
+#define MOTOR1_TIM &htim8
+#define MOTOR1_TIM_CH TIM_CHANNEL_1
+#define MOTOR1_GPIOx GPIOB
+#define MOTOR1_GPIO_Pin GPIO_PIN_5
 ///*-----Configure Motor End-----*/
 //
 ///*-----Configure Motor 2 Start-----*/
-//extern TIM_HandleTypeDef htim8; //For Motor 1
-//extern MDXX motor2;
-//#define MOTOR2_TIM &htim8
-//#define MOTOR2_TIM_CH TIM_CHANNEL_2
-//#define MOTOR2_GPIOx
-//#define MOTOR2_GPIO_Pin
+extern TIM_HandleTypeDef htim8; //For Motor 1
+extern MDXX motor2;
+#define MOTOR2_TIM &htim8
+#define MOTOR2_TIM_CH TIM_CHANNEL_2
+#define MOTOR2_GPIOx GPIOB
+#define MOTOR2_GPIO_Pin GPIO_PIN_4
 ///*-----Configure Motor End-----*/
 
 /*-----Configure Motor 3 Start-----*/
@@ -85,10 +86,19 @@ extern QEI encoder4;
 #define MOTOR_RATIO 0.33f
 /*-----Configure Encoder End-----*/
 
-extern FIR lowPassFilter;
+extern FIR lowPassFilter1;
+extern FIR lowPassFilter2;
+extern FIR lowPassFilter3;
+extern FIR lowPassFilter4;
 #define NUM_TAPS 31
 #define CUTOFF_FREQ 25.0
 #define SAMPLE_RATE 1000.0f  // 1kHz
+
+extern SKID_KINEMATIC robot_kinematics;
+#define WHEEL_RADIUS 0.245 / 2.0
+#define WHEEL_DISTANCE 3.8
+#define MAX_LINEAR_VEL 0.085
+#define MAX_ANGULAR_VEL 0.7 /3.0
 
 void transporter_begin();
 

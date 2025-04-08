@@ -102,7 +102,7 @@ clean:
 	-@echo ' '
 
 pre-build:
-	docker pull microros/micro_ros_static_library_builder:humble && docker run --rm -v /home/transporter/solar_transporter_ws/firmware/transporter_controller:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_stm32cubemx_utils/microros_static_library_ide microros/micro_ros_static_library_builder:humble
+	echo "1" | sudo -S chmod 666 /var/run/docker.sock && docker pull microros/micro_ros_static_library_builder:humble && docker run --rm -v /home/transporter/solar_transporter_ws/firmware/transporter_controller:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_stm32cubemx_utils/microros_static_library_ide microros/micro_ros_static_library_builder:humble
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
