@@ -47,10 +47,10 @@ void transporter_begin() {
 	MDXX_set_range(&motor3, 2000, 0);
 	MDXX_set_range(&motor4, 2000, 0);
 
-	PID_CONTROLLER_Init(&pid1, 0, 0, 0, 65535);
-	PID_CONTROLLER_Init(&pid2, 0, 0, 0, 65535);
-	PID_CONTROLLER_Init(&pid3, 0, 0, 0, 65535);
-	PID_CONTROLLER_Init(&pid4, 0, 0, 0, 65535);
+	PID_CONTROLLER_Init(&pid1, 500000, 7500, 0, 65535);
+	PID_CONTROLLER_Init(&pid2, 500000, 7500, 0, 65535);
+	PID_CONTROLLER_Init(&pid3, 500000, 7500, 0, 65535);
+	PID_CONTROLLER_Init(&pid4, 500000, 7500, 0, 65535);
 //	PID_CONTROLLER_Init(&pid4, 500000, 7500, 0, 65535);
 
 	FIR_init(&lowPassFilter1, NUM_TAPS, CUTOFF_FREQ, SAMPLE_RATE);

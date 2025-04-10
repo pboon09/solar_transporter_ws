@@ -446,9 +446,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		filteredValue3 = FIR_process(&lowPassFilter3, encoder3.radps);
 		filteredValue4 = FIR_process(&lowPassFilter4, encoder4.radps);
 
-		setpointL = sine_sample;
-		setpointR = sine_sample;
-
 		cmd_vel1 = PWM_Satuation(
 				PID_CONTROLLER_Compute(&pid1, setpointL - filteredValue1),
 				65535, -65535);
